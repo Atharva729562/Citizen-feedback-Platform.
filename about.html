@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="website icon" type="png" href="{{ url_for('static', filename='images/images-logo.png') }}">
+
+<style>       
+ img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Citizen Feedback Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>About Us</h1>
+        <button class="btn home" onclick="window.location.href='/'"style="margin-left: auto;">Home</button>
+    </header>
+
+    <main>
+        <img src="{{ url_for('static', filename='images/about.jpg') }}">
+        <section>
+            <h2>Who We Are</h2>
+            <p>The Citizen Feedback Platform is dedicated to connecting urban residents with the decision-makers shaping their cities.</p>
+        </section>
+
+        <section>
+            <h2>Our Mission</h2>
+            <p>We empower citizens by enabling them to share their feedback on various urban issues such as infrastructure, public services, and transportation.</p>
+        </section>
+
+        <section>
+            <h2>How It Works</h2>
+            <p>By collecting real-time data through surveys and polls, we help local governments make informed decisions that reflect the needs of the community.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Contact No: +1234567890</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="website icon" type="png" href="{{ url_for('static', filename='images/images-logo.png') }}">
+    <title>Citizen Feedback Platform</title>
+    <script>
+        function updateScaleValue(id, value) {
+    document.getElementById(id).textContent = value;
+}
+
+        let currentImageIndex = 0;
+        const images = [
+    "{{ url_for('static', filename='images/citizen_feedback_1.jpg') }}",
+    "{{ url_for('static', filename='images/citizen_feedback_2.jpg') }}",
+    "{{ url_for('static', filename='images/citizen_feedback_3.jpg') }}"
+];
+
+        function changeImage() {
+            const imageElement = document.getElementById('dynamic-image');
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            imageElement.src = images[currentImageIndex];
+        }
+
+        function startImageRotation() {
+            setInterval(changeImage, 5000);
+        }
+
+        function goToSurvey() {
+            const homePage = document.getElementById('home-page');
+            const surveyPage = document.getElementById('survey-container');
+            homePage.style.display = 'none';
+            surveyPage.style.display = 'block';
+        }
+
+        function goToFeedback() {
+            const surveyPage = document.getElementById('survey-container');
+            const feedbackPage = document.getElementById('feedback-page');
+            surveyPage.style.display = 'none';
+            feedbackPage.style.display = 'block';
+        }
+
+        function goToThankYouPage() {
+            const feedbackPage = document.getElementById('feedback-page');
+            const thankYouPage = document.getElementById('thank-you-page');
+            feedbackPage.style.display = 'none';
+            thankYouPage.style.display = 'block';
+        }
+
+        function goToHomePage() {
+            const allPages = document.querySelectorAll('main > div');
+            allPages.forEach(page => page.style.display = 'none');
+            const homePage = document.getElementById('home-page');
+            homePage.style.display = 'block';
+        }
+
+        function showAboutUs() {
+            alert('The Citizen Feedback Platform is dedicated to connecting urban residents with the decision-makers shaping their cities. Our platform enables citizens to easily share their feedback on a range of urban issues such as infrastructure, public services, transportation, and environmental concerns By collecting real-time data through surveys and polls, we help local governments and urban planners make informed, data-driven decisions that truly reflect the needs of the community. Whether it’s improving public transportation or enhancing waste management, your feedback drives positive change in your city.We believe in the power of citizen engagement to create smarter, more sustainable urban environments. Join us in making your voice heard and helping build better cities for everyone..');
+        }
+    </script>
+
+<style>
+body {
+
+    background: linear-gradient(-45deg, #2ef51c, #fbfbff, #ff8811);
+    background-size: 200%  200% ;
+    animation: gradientAnimation 6s ease infinite;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Gradient animation */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 50% 50%;
+    }
+    50% {
+        background-position: 50% 50%;
+    }
+    100% {
+        background-position: 50% 50%;
+    }
+}
+
+header {
+    background: linear-gradient(to right, #333, #111);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.flag-logo {
+    width: 40px;
+    height: auto;
+    margin-right: 15px;
+}
+
+.header-buttons {
+    display: flex;
+    margin-left: auto;
+    padding: 15 px;
+}
+
+.btn:hover .stars {
+display: block;
+filter: drop-shadow(0 0 10px
+#fffdef);
+}
+
+.btn {
+    background: linear-gradient(to bottom, #f44336, #d32f2f);
+    display: block;
+    filter: drop-shadow(0 0 10px);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn.survey {
+    background: linear-gradient(to bottom, #2196F3, #1976D2);
+}
+
+.btn.feedback {
+    background: linear-gradient(to bottom, #FF9800, #F57C00);
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+main {
+    padding: 20px;
+}
+
+.feedback-form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.feedback-form input,
+.feedback-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.feedback-form input[type="range"] {
+    width: calc(100% - 20px);
+    margin: 10px;
+}
+
+.submit-btn {
+    background: linear-gradient(to right, #2453ff, #5b6eff);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(to right, #2238ff, #5c51ff);
+    transform: scale(1.05);
+}
+
+
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background: linear-gradient(to right, #333, #111);
+    color: white;
+    position: bottom;
+    bottom: 0;
+    width: 100%;
+}
+
+/* RESPONSIVE DESIGN */
+
+/* ✅ For tablets (width 768px or smaller) */
+@media screen and (max-width: 768px) {
+    .feedback-form {
+        width: 80%;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}
+
+/* ✅ For mobile devices (width 480px or smaller) */
+@media screen and (max-width: 480px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .flag-logo {
+        width: 40px;
+    }
+
+    .feedback-form {
+        width: 90%;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+
+</style>
+
+</head>
+<body onload="startImageRotation()">
+    <header>
+        <img src="{{ url_for('static', filename='images/india-flag.png') }}" alt="India Flag" class="flag-logo">
+        <h1>Citizen Feedback Platform</h1>
+        <button class="btn about" onclick="window.location.href='/about'" style="margin-left:57% ">About Us</button>
+        <button class="btn home" onclick="goToHomePage()" style="margin-left: auto;">Home</button>
+        
+    </header>
+
+    <main>
+        <!-- Home Page Content -->
+        <div id="home-page">
+            <h2>Welcome to the Citizen Feedback Platform</h2>
+            <div class="image-container" style="text-align: center; margin-bottom: 20px;">
+                <img id="dynamic-image" src="citizen_feedback_1.jpg" alt="Citizen Feedback" style="width: 60%; height: 600px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+            </div>
+            <form class="feedback-form" onsubmit="goToSurvey(); return false;">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="location">Location:</label>
+                <select id="location" name="location" required>
+                    <option value="">Select your location</option>
+                    <option value="pune_camp">Pune Camp</option>
+                    <option value="pune_kothrud">Kothrud</option>
+                    <option value="pune_viman_nagar">Viman Nagar</option>
+                    <option value="pune_hadapsar">Hadapsar</option>
+                    <option value="pune_pimpri">Pimpri</option>
+                    <option value="pune_chinchwad">Chinchwad</option>
+                    <option value="pune_balewadi">Balewadi</option>
+                    <option value="pune_undri">Undri</option>
+                    <option value="pune_saswad">Saswad</option>
+                    <option value="pune_wakad">Wakad</option>
+                    <option value="pune_baner">Baner</option>
+                    <option value="pune_kharadi">Kharadi</option>
+                    <option value="pune_senapati_bapat_road">Senapati Bapat Road</option>
+                    <option value="pune_vishrantwadi">Vishrantwadi</option>
+                    <option value="pune_dhayari">Dhayari</option>
+                    <option value="pune_nigdi">Nigdi</option>
+                    <option value="pune_bhosari">Bhosari</option>
+                    <option value="pune_feroze_shah_road">Feroze Shah Road</option>
+                    <option value="pune_sangamwadi">Sangamwadi</option>
+                    <option value="pune_khadki">Khadki</option>
+                    <option value="pune_pashan">Pashan</option>
+                </select>
+
+                <button type="submit" class="submit-btn">Next</button>
+            </form>
+        </div>
+
+
+        <!-- Survey Page Content -->
+        <div id="survey-container" style="display: none;">
+            <form id="survey-form" class="feedback-form" onsubmit="goToFeedback(); return false;">
+                <div class="question" style="margin-bottom: 20px;">
+                    <label for="question1">1. How safe do you feel in your neighborhood, and do you believe the local authorities are effectively addressing safety concerns?</label>
+                    <div style="display: flex; gap: 50px;">
+                        <label><input type="radio" id="safe-yes" name="safe" value="yes" required> Yes</label>
+                        <label><input type="radio" id="safe-no" name="safe" value="no"> No</label>
+                    </div>
+                </div>
+
+                <label for="question2">2. How would you rate the accessibility and quality of healthcare services in your area?</label>
+        <input type="range" id="healthcare" name="healthcare" min="1" max="10" step="1" required style="width: 100%;"
+        oninput="updateScaleValue('healthcare-value', this.value); fetchRatingStats('healthcare')">
+        <div style="display: flex; justify-content: space-between;">
+            <span>1</span>5<span>10</span>
+            <div id="healthcare-percentage" style="display: none;"></div>
+        </div>
+                
+                <div class="question" style="margin-bottom: 20px;">
+                    <label for="question3">3. How satisfied are you with the quality of education provided in local schools?</label>
+                    <div style="display: flex; gap: 50px;">
+                        <label><input type="radio" id="education-very-satisfied" name="education" value="very-satisfied" required> Very Satisfied😊</label>
+                        <label><input type="radio" id="education-satisfied" name="education" value="satisfied"> Satisfied😐</label>
+                        <label><input type="radio" id="education-dissatisfied" name="education" value="dissatisfied"> Dissatisfied☹️</label>
+                    </div>
+                </div>
+
+                <label for="question4">4. How would you rate the condition of public roads, transportation systems, and waste management services in your area?</label>
+        <input type="range" id="public-services" name="public-services" min="1" max="10" step="1" required style="width: 100%;"
+        oninput="updateScaleValue('public-services-value', this.value); fetchRatingStats('public-services')">
+        <div style="display: flex; justify-content: space-between;">
+            <span>1</span>5<span>10</span>
+            <div id="public-services-percentage" style="display: none;"></div>
+        </div>
+
+                <div class="question" style="margin-bottom: 20px; gap: 1px;">
+                    <label for="question5">5. Which area of service would you like to see prioritized for improvement?</label>
+                    <div style="display: flex; gap: 50px;">
+                        <label><input type="radio" id="priority-transportation" name="priority" value="transportation" required> Transportation</label>
+                        <label><input type="radio" id="priority-healthcare" name="priority" value="healthcare"> Healthcare</label>
+                        <label><input type="radio" id="priority-education" name="priority" value="education"> Education</label>
+                        <label><input type="radio" id="priority-safety" name="priority" value="safety"> Safety</label>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1px;">
+                    <label for="question6">6. How would you rate your overall experience as a tourist in this area?</label>
+                    
+                </div>  
+        <style>
+        .rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end; /* Ensure stars are aligned in reverse order */
+    gap: 1px; /* Adjust spacing between stars */
+    margin: 0; /* Remove extra margins */
+}
+
+        .rating input[type="radio"] {
+            display: none;
+        }
+
+        .rating label {
+            cursor: pointer;
+            font-size: 90px;
+            color: #ddd;
+        }
+
+        .rating input[type="radio"]:checked ~ label,
+        .rating input[type="radio"]:hover ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #f0c330;
+        }
+
+        .rating input[type="radio"]:checked ~ label {
+            color: #f0c330;
+        }
+    </style>
+    
+     <div class="rating">
+         <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+         <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+         <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+         <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+         <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+     </div>
+
+                <button type="submit" class="submit-btn">Next</button>
+            </form>
+        </div>
+    
+    
+        <!-- Feedback Page Content -->
+        <div id="feedback-page" style="display: none;">
+            <header>
+                <h2>Give Feedback Here</h2>
+                
+            </header>
+            <form id="feedback-form" class="feedback-form" onsubmit="goToThankYouPage(); return false;">
+                <label for="feedback-name">Name:</label>
+                <input type="text" id="feedback-name" name="feedback-name" required>
+
+                <label for="feedback-contact">Contact No.:</label>
+                <input type="text" id="feedback-contact" name="feedback-contact" required>
+
+                <label for="feedback-email">Email:</label>
+                <input type="email" id="feedback-email" name="feedback-email" required>
+
+                <label for="feedback-comment">Comment:</label>
+                <textarea id="feedback-comment" name="feedback-comment" rows="5" required></textarea>
+
+                <button type="submit" class="submit-btn">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!-- Thank You Page Content -->
+        <div id="thank-you-page" style="display: none; text-align: center;">
+            
+            </header>
+            <h1>Thank You for Your Feedback!</h1>
+            <p style="font-size: 100px;">👍😊❤️</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Contact No: +1234567890</p>
+    </footer>
+</body>
+</html>
+<script>
+    async function saveSurvey(data) {
+        const response = await fetch('http://127.0.0.1:5000/save-survey', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        return response.ok;
+    }
+
+    async function saveFeedback(data) {
+        const response = await fetch('http://127.0.0.1:5000/save-feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        return response.ok;
+    }
+
+    function goToFeedback() {
+        const surveyData = {
+            question1: document.querySelector('input[name="safe"]:checked')?.value,
+            healthcare: document.getElementById('healthcare').value,
+            education: document.querySelector('input[name="education"]:checked')?.value,
+            publicServices: document.getElementById('public-services').value,
+            priority: document.querySelector('input[name="priority"]:checked')?.value,
+            rating: document.querySelector('input[name="rating"]:checked')?.value,
+        };
+        saveSurvey(surveyData).then((success) => {
+            if (success) {
+                document.getElementById('survey-container').style.display = 'none';
+                document.getElementById('feedback-page').style.display = 'block';
+            }
+        });
+    }
+
+    function goToThankYouPage() {
+        const feedbackData = {
+            name: document.getElementById('feedback-name').value,
+            contact: document.getElementById('feedback-contact').value,
+            email: document.getElementById('feedback-email').value,
+            comment: document.getElementById('feedback-comment').value,
+        };
+        saveFeedback(feedbackData).then((success) => {
+            if (success) {
+                document.getElementById('feedback-page').style.display = 'none';
+                document.getElementById('thank-you-page').style.display = 'block';
+            }
+        });
+    }
+</script>
+
+<script>
+function resetAllData() {
+    // Reset home page form inputs
+    document.querySelectorAll('#home-page input, #home-page select').forEach(input => {
+        if (input.type === 'radio' || input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+
+    // Reset survey form inputs
+    document.querySelectorAll('#survey-form input, #survey-form select').forEach(input => {
+        if (input.type === 'radio' || input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+
+    // Reset feedback form inputs
+    document.querySelectorAll('#feedback-form input, #feedback-form textarea').forEach(input => {
+        input.value = '';
+    });
+
+    // Reset all <select> elements to their default value
+    document.querySelectorAll('select').forEach(select => {
+        select.selectedIndex = 0;
+    });
+
+    // Hide all pages and show home page
+    const allPages = document.querySelectorAll('main > div');
+    allPages.forEach(page => page.style.display = 'none');
+    const homePage = document.getElementById('home-page');
+    homePage.style.display = 'block';
+}</script>
+
+<script>
+function goToHomePage() {
+    resetAllData();
+}</script>
+
+<script>
+    async function fetchRatingStats(category) {
+        try {
+            const response = await fetch('/get-rating-stats');
+            const data = await response.json();
+
+            if (data.healthcare && data.public_services) {
+                if (category === "healthcare") {
+                    let healthcareStats = "<strong>Healthcare Ratings:</strong><br>";
+                    for (let rating in data.healthcare) {
+                        healthcareStats += `Rating ${rating}: ${data.healthcare[rating]}<br>`;
+                    }
+                    document.getElementById('healthcare-percentage').innerHTML = healthcareStats;
+                    document.getElementById('healthcare-percentage').style.display = "block";
+                }
+
+                if (category === "public-services") {
+                    let publicServicesStats = "<strong>Public Services Ratings:</strong><br>";
+                    for (let rating in data.public_services) {
+                        publicServicesStats += `Rating ${rating}: ${data.public_services[rating]}<br>`;
+                    }
+                    document.getElementById('public-services-percentage').innerHTML = publicServicesStats;
+                    document.getElementById('public-services-percentage').style.display = "block";
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching rating stats:', error);
+        }
+    }
+
+    function updateScaleValue(id, value) {
+        document.getElementById(id).textContent = value;
+    }
+</script>
+
+
+
+
+
+
+
+
