@@ -111,9 +111,9 @@ filter: drop-shadow(0 0 10px
 }
 
 .btn {
-    background: linear-gradient(to bottom, #f44336, #d32f2f);
+    background: linear-gradient(to bottom, #111, #111);
     display: block;
-    filter: drop-shadow(0 0 10px);
+
     color: white;
     border: none;
     padding: 10px 15px;
@@ -228,6 +228,57 @@ footer {
     }
 }
 
+/* Box-style options */
+.box-options {
+    display: flex;
+    flex-direction: column; /* Vertical layout */
+    gap: 10px;
+  }
+  
+  .box-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .box-option:hover {
+    background: #f5f5f5;
+  }
+  
+  /* Hide default radio button */
+  .box-option input[type="radio"] {
+    display: none;
+  }
+  
+  /* Custom box tick */
+  .box-tick {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+  }
+  
+  /* Show tick when selected */
+  .box-option input:checked ~ .box-tick::after {
+    content: "✓";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #2196F3;
+  }
+  
+  /* Ratio display styling */
+  .ratio-display {
+    margin-left: auto;
+    color: #666;
+    font-size: 0.9em;
+  }
 
 </style>
 
@@ -297,28 +348,60 @@ footer {
         <div id="survey-container" style="display: none;">
             <form id="survey-form" class="feedback-form" onsubmit="goToFeedback(); return false;">
                 <div class="question" style="margin-bottom: 20px;">
-                    <label for="question1">1. How safe do you feel in your neighborhood, and do you believe the local authorities are effectively addressing safety concerns?</label>
-                    <div style="display: flex; gap: 50px;">
-                        <label><input type="radio" id="safe-yes" name="safe" value="yes" required> Yes</label>
-                        <label><input type="radio" id="safe-no" name="safe" value="no"> No</label>
-                    </div>
-                </div>
+                        <label>1. How safe do you feel in your neighborhood?</label>
+                        <div class="box-options">
+                          <!-- Box-style options -->
+                          <label class="box-option">
+                            <input type="radio" name="safe" value="yes" required>
+                            <span class="box-tick"></span>
+                            Yes
+                            <span class="ratio-display" id="safe-yes-ratio"></span>
+                          </label>
+                          <label class="box-option">
+                            <input type="radio" name="safe" value="no">
+                            <span class="box-tick"></span>
+                            No
+                            <span class="ratio-display" id="safe-no-ratio"></span>
+                          </label>
+                        </div>
+                      </div>
+
 
                 <label for="question2">2. How would you rate the accessibility and quality of healthcare services in your area?</label>
         <input type="range" id="healthcare" name="healthcare" min="1" max="10" step="1" required style="width: 100%;"
         oninput="updateScaleValue('healthcare-value', this.value); fetchRatingStats('healthcare')">
         <div style="display: flex; justify-content: space-between;">
             <span>1</span>5<span>10</span>
-            <div id="healthcare-percentage" style="display: none;"></div>
+        </div>
+
+        <div id="healthcare-percentage" style="display: none; margin-top: 10px;">
+            <strong>Healthcare Ratings:</strong><br>
+            <!-- Dynamically populated percentages will appear here -->
         </div>
                 
                 <div class="question" style="margin-bottom: 20px;">
-                    <label for="question3">3. How satisfied are you with the quality of education provided in local schools?</label>
-                    <div style="display: flex; gap: 50px;">
-                        <label><input type="radio" id="education-very-satisfied" name="education" value="very-satisfied" required> Very Satisfied😊</label>
-                        <label><input type="radio" id="education-satisfied" name="education" value="satisfied"> Satisfied😐</label>
-                        <label><input type="radio" id="education-dissatisfied" name="education" value="dissatisfied"> Dissatisfied☹️</label>
-                    </div>
+                <label for="question3">3. How satisfied are you with the quality of education provided in local schools?</label>
+                <div class="box-options">
+                    <!-- Box-style options -->
+                    <label class="box-option">
+                      <input type="radio" name="education" value="very-satisfied" required>
+                      <span class="box-tick"></span>
+                      Very Satisfied😊
+                      <span class="ratio-display" id="education-very-satisfied-ratio"></span>
+                    </label>
+                    <label class="box-option">
+                    <input type="radio" name="education" value="satisfied" required>
+                    <span class="box-tick"></span>
+                    Satisfied😐
+                    <span class="ratio-display" id="education-satisfied-ratio"></span>
+                    </label>
+                    <label class="box-option">
+                    <input type="radio" name="education" value="dissatisfied" required>
+                    <span class="box-tick"></span>
+                    Dissatisfied☹️
+                    <span class="ratio-display" id="education-dissatisfied-ratio"></span>
+                    </label>  
+                  </div>
                 </div>
 
                 <label for="question4">4. How would you rate the condition of public roads, transportation systems, and waste management services in your area?</label>
@@ -329,14 +412,40 @@ footer {
             <div id="public-services-percentage" style="display: none;"></div>
         </div>
 
+        <div id="public-services-percentage" style="display: none; margin-top: 10px;">
+            <strong>Public Services Ratings:</strong><br>
+            <!-- Dynamically populated percentages will appear here -->
+        </div>
+
                 <div class="question" style="margin-bottom: 20px; gap: 1px;">
-                    <label for="question5">5. Which area of service would you like to see prioritized for improvement?</label>
-                    <div style="display: flex; gap: 50px;">
-                        <label><input type="radio" id="priority-transportation" name="priority" value="transportation" required> Transportation</label>
-                        <label><input type="radio" id="priority-healthcare" name="priority" value="healthcare"> Healthcare</label>
-                        <label><input type="radio" id="priority-education" name="priority" value="education"> Education</label>
-                        <label><input type="radio" id="priority-safety" name="priority" value="safety"> Safety</label>
-                    </div>
+                <label for="question5">5. Which area of service would you like to see prioritized for improvement?</label>
+                <div class="box-options">
+                    <!-- Box-style options -->
+                    <label class="box-option">
+                      <input type="radio" name="priority" value="transportation" required>
+                      <span class="box-tick"></span>
+                      Transportation
+                      <span class="ratio-display" id="priority-transportation-ratio"></span>
+                    </label>
+                    <label class="box-option">
+                      <input type="radio" name="priority" value="healthcare">
+                      <span class="box-tick"></span>
+                      Healthcare
+                      <span class="ratio-display" id="priority-healthcare-ratio"></span>
+                    </label>
+                    <label class="box-option">
+                        <input type="radio" name="priority" value="education">
+                        <span class="box-tick"></span>
+                        Education
+                        <span class="ratio-display" id="priority-education-ratio"></span>
+                      </label>
+                      <label class="box-option">
+                        <input type="radio" name="priority" value="safety">
+                        <span class="box-tick"></span>
+                         Safety
+                        <span class="ratio-display" id="priority-safety-ratio"></span>
+                      </label>
+                  </div>
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 1px;">
@@ -382,11 +491,96 @@ footer {
          <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
      </div>
 
+                
+            
+        
+
+                <!-- Question 7 -->
+                <div class="question">
+                    <label>7. How would you rate the availability and cleanliness of public parks?</label>
+                    <input type="range" id="parks" name="parks" min="0" max="10" step="1" required
+                        oninput="updateScaleValue('parks-value', this.value)">
+                    <div class="scale-labels">
+                    <span>0 (Very Poor)</span>
+                    <span>10 (Excellent)</span>
+                    </div>
+                </div>
+  
+                <!-- Question 8 -->
+                <div class="question">
+                    <label>8.How easy is it to access government services?</label>
+                    <div class="box-options">
+                        <label class="box-option">
+                        <input type="radio" name="govt-services" value="very-difficult" required>
+                        <span class="box-tick"></span>
+                        Very Difficult
+                        <span class="ratio-display" id="govt-services-very-difficult-ratio"></span>
+                        </label>
+                        <label class="box-option">
+                        <input type="radio" name="govt-services" value="somewhat-difficult">
+                        <span class="box-tick"></span>
+                        Somewhat Difficult
+                        <span class="ratio-display" id="govt-services-somewhat-difficult-ratio"></span>
+                        </label>
+                        <label class="box-option">
+                        <input type="radio" name="govt-services" value="neutral">
+                        <span class="box-tick"></span>
+                        Neutral
+                        <span class="ratio-display" id="govt-services-neutral-ratio"></span>
+                        </label>
+                        <label class="box-option">
+                        <input type="radio" name="govt-services" value="somewhat-easy">
+                        <span class="box-tick"></span>
+                        Somewhat Easy
+                        <span class="ratio-display" id="govt-services-somewhat-easy-ratio"></span>
+                        </label>
+                        <label class="box-option">
+                        <input type="radio" name="govt-services" value="very-easy">
+                        <span class="box-tick"></span>
+                        Very Easy
+                        <span class="ratio-display" id="govt-services-very-easy-ratio"></span>
+                        </label>
+                    </div>
+                </div>
+  
+                <!-- Question 9 -->
+                <div class="question">
+                    <label>9. Satisfaction with public transportation?</label>
+                    <div class="emoji-options">
+                    <label class="box-option">
+                        <input type="radio" name="transportation" value="dissatisfied">
+                        <span class="box-tick"></span>
+                        Dissatisfied
+                        <span class="ratio-display" id="transportation-dissatisfied-ratio"></span>
+                    </label>
+                    <label class="box-option">
+                        <input type="radio" name="transportation" value="neutral">
+                        <span class="box-tick"></span>
+                        Neutral
+                        <span class="ratio-display" id="transportation-neutral-ratio"></span>
+                    </label>
+                    <label class="box-option">
+                        <input type="radio" name="transportation" value="satisfied">
+                        <span class="box-tick"></span>
+                        Satisfied
+                        <span class="ratio-display" id="transportation-satisfied-ratio"></span>
+                    </label>
+                    </div>
+                </div>
+                
+                <!-- Question 10 -->
+                <div class="question">
+                    <label>10. Air and noise pollution levels?</label>
+                    <input type="range" id="pollution" name="pollution" min="0" max="10" step="1" required
+                        oninput="updateScaleValue('pollution-value', this.value)">
+                    <div class="scale-labels">
+                    <span>0 (Severe Pollution)</span>
+                    <span>10 (Clean & Quiet)</span>
+                    </div>
+                </div>
                 <button type="submit" class="submit-btn">Next</button>
             </form>
         </div>
-    
-    
         <!-- Feedback Page Content -->
         <div id="feedback-page" style="display: none;">
             <header>
@@ -451,6 +645,10 @@ footer {
             publicServices: document.getElementById('public-services').value,
             priority: document.querySelector('input[name="priority"]:checked')?.value,
             rating: document.querySelector('input[name="rating"]:checked')?.value,
+            parks: document.getElementById('parks').value,
+            govtServices: document.querySelector('input[name="govt-services"]:checked')?.value,
+            transportation: document.querySelector('input[name="transportation"]:checked')?.value,
+            pollution: document.getElementById('pollution').value
         };
         saveSurvey(surveyData).then((success) => {
             if (success) {
@@ -519,39 +717,78 @@ function goToHomePage() {
 }</script>
 
 <script>
-    async function fetchRatingStats(category) {
-        try {
-            const response = await fetch('/get-rating-stats');
-            const data = await response.json();
+async function fetchRatingStats(category) {
+    try {
+        const response = await fetch('/get-rating-stats');
+        const data = await response.json();
 
-            if (data.healthcare && data.public_services) {
-                if (category === "healthcare") {
-                    let healthcareStats = "<strong>Healthcare Ratings:</strong><br>";
-                    for (let rating in data.healthcare) {
-                        healthcareStats += `Rating ${rating}: ${data.healthcare[rating]}<br>`;
-                    }
-                    document.getElementById('healthcare-percentage').innerHTML = healthcareStats;
-                    document.getElementById('healthcare-percentage').style.display = "block";
-                }
+        if (data.healthcare && data.public_services) {
+            let statsHTML = "";
 
-                if (category === "public-services") {
-                    let publicServicesStats = "<strong>Public Services Ratings:</strong><br>";
-                    for (let rating in data.public_services) {
-                        publicServicesStats += `Rating ${rating}: ${data.public_services[rating]}<br>`;
-                    }
-                    document.getElementById('public-services-percentage').innerHTML = publicServicesStats;
-                    document.getElementById('public-services-percentage').style.display = "block";
+            if (category === "healthcare") {
+                statsHTML = "<strong>Healthcare Ratings:</strong><br>";
+                for (let rating in data.healthcare) {
+                    statsHTML += `Rating ${rating}: ${data.healthcare[rating]}<br>`;
                 }
+                document.getElementById('healthcare-percentage').innerHTML = statsHTML;
+                document.getElementById('healthcare-percentage').style.display = "block";
             }
-        } catch (error) {
-            console.error('Error fetching rating stats:', error);
-        }
-    }
 
-    function updateScaleValue(id, value) {
-        document.getElementById(id).textContent = value;
+            if (category === "public-services") {
+                statsHTML = "<strong>Public Services Ratings:</strong><br>";
+                for (let rating in data.public_services) {
+                    statsHTML += `Rating ${rating}: ${data.public_services[rating]}<br>`;
+                }
+                document.getElementById('public-services-percentage').innerHTML = statsHTML;
+                document.getElementById('public-services-percentage').style.display = "block";
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching rating stats:', error);
     }
+}
 </script>
+
+
+
+<script>// Generic function to update ratios for any question
+async function updateRatios(questionName) {
+  try {
+    const response = await fetch(`/get-ratios?question=${questionName}`);
+    const data = await response.json();
+    
+    // Loop through all options and update ratios
+    for (const [option, percentage] of Object.entries(data)) {
+      const ratioElement = document.getElementById(`${questionName}-${option}-ratio`);
+      if (ratioElement) {
+        ratioElement.textContent = `${percentage}%`;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching ratios:", error);
+  }
+}
+    
+    // Attach event listeners to all radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const questionName = e.target.name; // e.g., "safe", "education", "priority"
+        updateRatios(questionName);
+      });
+    });
+    document.querySelectorAll('input[name="govt-services"]').forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    updateRatios("govt-services");
+  });
+});
+
+// Add for Question 9
+document.querySelectorAll('input[name="transportation"]').forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    updateRatios("transportation");
+  });
+});
+    </script>
 
 
 
