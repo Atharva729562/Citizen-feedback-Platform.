@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from openpyxl import Workbook, load_workbook
+from collections import defaultdict
 import os
 
 app = Flask(__name__, template_folder="templates")
@@ -43,6 +44,11 @@ def get_rating_stats():
         def calculate_percentage(ratings):
             total_responses = len(ratings)
             rating_count = {str(i): ratings.count(str(i)) for i in range(1, 11)}
+
+            for rating in ratings:
+                if rating is not None:
+                    rating_count[str(int(rating))] += 1
+
             if total_responses > 0:
                 return {k: f"{(v / total_responses) * 100:.1f}%" for k, v in rating_count.items()}
             return {str(i): "0%" for i in range(1, 11)}
@@ -56,6 +62,40 @@ def get_rating_stats():
         }
     except Exception as e:
         return {"error": str(e)}
+    
+@app.route('/get-ratios')
+def get_ratios():
+    question = request.args.get('question', 'safe')  # Default to "safe" question
+    workbook = load_workbook(SURVEY_FILE)
+    sheet = workbook.active
+
+    # Map questions to their Excel column indices
+    question_columns = {
+    "safe": 0,
+    "healthcare": 1,
+    "education": 2,
+    "public_services": 3,
+    "priority": 4,
+    "rating": 5,
+    "parks": 6,
+    "govt-services": 7,
+    "transportation": 8,
+    "pollution": 9
+}
+    col_idx = question_columns.get(question, 0)
+
+    # Count responses using defaultdict
+    counts = defaultdict(int)
+    for row in sheet.iter_rows(min_row=2, values_only=True):
+        value = row[col_idx]
+        if value is not None:
+            counts[str(value)] += 1  # Ensure value is string
+
+    total = sum(counts.values())
+    percentages = {k: round((v / total) * 100, 1) if total > 0 else 0 for k, v in counts.items()}
+
+    return jsonify(percentages)
+
 
 # Initialize Excel files if they don't exist
 def initialize_excel(file_path, headers):
@@ -66,7 +106,7 @@ def initialize_excel(file_path, headers):
         workbook.save(file_path)
 
 # Initialize survey and feedback files
-initialize_excel(SURVEY_FILE, ["Question1", "Healthcare", "Education", "Public Services", "Priority", "Rating"])
+initialize_excel(SURVEY_FILE, ["Question1", "Healthcare", "Education", "Public Services", "Priority", "Rating", "Parks", "Govt Services", "Transportation", "Pollution"])
 initialize_excel(FEEDBACK_FILE, ["Name", "Contact", "Email", "Comment"])
 
 @app.route('/')
@@ -94,7 +134,11 @@ def save_survey():
             survey_data.get("education"),
             survey_data.get("publicServices"),
             survey_data.get("priority"),
-            survey_data.get("rating")
+            survey_data.get("rating"),
+            survey_data.get("parks"),
+            survey_data.get("govtServices"),
+            survey_data.get("transportation"),
+            survey_data.get("pollution")
         ])
         workbook.save(SURVEY_FILE)
         return jsonify({"message": "Survey data saved successfully"}), 200
